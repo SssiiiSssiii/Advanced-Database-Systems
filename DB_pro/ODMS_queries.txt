@@ -1,0 +1,220 @@
+    //Query 1
+    //Retrieve names and salary of all male employee
+    
+Query query1 = em.createNamedQuery("Employee.findAll");
+List<Employee> employees = query1.getResultList();
+
+ System.out.println("        name" + "   salary");
+ 
+for(Employee employee : employees){
+    if( employee.getSex() == 'M' )
+         System.out.format( "%12s,%10s\n",employee.getFname() , employee.getSalary() );
+ }
+
+---------
+ //Query 2
+    //Retrieve names of employees who get salary between 30000 and 40000.
+    
+Query query1 = em.createNamedQuery("Employee.findAll");
+List<Employee> employees = query1.getResultList();
+
+ System.out.println("        name" + "   salary");
+ 
+for(Employee employee : employees){
+    if( employee.getSalary().doubleValue() >= 30000 && employee.getSalary().doubleValue() <= 40000)
+         System.out.format( "%12s,%10s\n",employee.getFname() , employee.getSalary() );
+ }
+-----------
+    //Query 3
+    //Retrieve the name of each employee and his/her department name.
+    
+Query query1 = em.createNamedQuery("Employee.findAll");
+List<Employee> employees = query1.getResultList();
+
+ System.out.println("        name" + "               Dname");
+ 
+for(Employee employee : employees)
+         System.out.format( "%12s,%20s\n",employee.getFname() , employee.getDno().getDname() );
+ 
+--------------
+ //Query 4
+ //Retrieve the name of each department and its manager name.
+Query query1 = em.createNamedQuery("Department.findAll");
+List<Department> Departments = query1.getResultList();
+
+ System.out.println("Dname" + "                     manager");
+ 
+for(Department departmet : Departments)
+         System.out.format( "%s,%20s\n",departmet.getDname() , departmet.getMgrssn().getFname() );
+   -------------
+ //Query 5
+ //For the project “Computerization”, retrieve the name of employee who works on it.
+Query query2 = em.createNamedQuery("WorksOn.findAll");
+List<WorksOn> worksOnList = query2.getResultList();
+
+ System.out.println("Fname");
+ 
+    for( WorksOn w : worksOnList ){
+         if( w.getProject().getPname().equals("Computerization") )
+              System.out.println(w.getEmployee().getFname());
+    }
+  ------------
+
+    //Query 6
+    //Retrieve the names of all employees in department 5 who work more than 10 hours per week on the “ProductX” project.
+
+Query query2 = em.createNamedQuery("WorksOn.findAll");
+List<WorksOn> worksOnList = query2.getResultList();
+
+ System.out.println("Fname");
+ 
+    for( WorksOn w : worksOnList ){
+         if( w.getProject().getPname().equals("ProductX") && w.getEmployee().getDno().getDno() == 5 && w.getHours().doubleValue() > 10)
+              System.out.println( w.getEmployee().getFname() );
+    }
+  
+
+    }
+-----------
+//Query 7
+//List the name of each employee and his/her spouse. 
+
+Query query2 = em.createNamedQuery("Dependent.findAll");
+List<Dependent> dependentList = query2.getResultList();
+
+ System.out.println("Fname   Dependent_name");
+ 
+    for( Dependent d : dependentList ){
+         if( d.getRelationship().equals("Spouse"))
+              System.out.println( d.getEmployee().getFname() +"  "+ d.getDependentPK().getDependentname());
+    }
+  ---------------
+
+//Query 8
+//Delete the employee named Jhon.
+Query query1 = em.createNamedQuery("Employee.deleteJohn");
+query1.executeUpdate();
+
+Query query2 = em.createNamedQuery("Employee.findAll");
+List<Employee> employees = query2.getResultList();
+
+ System.out.println("name" );
+ 
+for(Employee employee : employees){
+         System.out.format( "%1s\n",employee.getFname() );
+ }
+-------------
+//Query 9
+//Retrieve the research department and the average of their employees' salaries.
+ 
+Query query1 = em.createNamedQuery("Employee.findAll");
+List<Employee> employees = query1.getResultList();
+
+ System.out.println("aveSalary");
+ 
+ double sumSalary = 0;
+ int noOfEmpInDepResearch = 0;
+for(Employee employee : employees){
+    if( employee.getDno().getDname().equals("Research") ){
+        noOfEmpInDepResearch++;
+        sumSalary += employee.getSalary().doubleValue();
+    }
+ }
+  
+         System.out.print((sumSalary / noOfEmpInDepResearch) );
+--------------
+//Query 10
+//Retrieve the name, salary, project number, project name, and hours of each employee either works on project or not.
+ 
+Query query2 = em.createNamedQuery("WorksOn.findAll");
+List<WorksOn> worksOnList = query2.getResultList();
+
+ System.out.println("Fname");
+ 
+    for( WorksOn w : worksOnList ){
+              System.out.println( w.getEmployee().getFname()+" "+w.getEmployee().getSalary()+" "+w.getProject().getPnumber()+" "+w.getProject().getPname()+" "+w.getHours());
+    }
+  
+    }
+    
+--------
+    //Query 11
+    //Retrieve the name of department which give their employees’ salaries greater than 5000
+ 
+Query query1 = em.createNamedQuery("Employee.findAll");
+List<Employee> employees = query1.getResultList();
+
+ System.out.println("sumSalary");
+ 
+ double sumSalary1 = 0;
+ int noOfEmpInDepResearch = 0;
+ 
+for(Employee employee : employees){
+    if( employee.getDno().getDname().equals("Research") ){
+        noOfEmpInDepResearch++;
+        sumSalary1 += employee.getSalary().doubleValue();
+    }
+ }
+  
+if( sumSalary1>5000 )
+    System.out.println("Research");
+
+ double sumSalary2 = 0;
+ 
+for(Employee employee : employees){
+    if( employee.getDno().getDname().equals("Headquarters") ){
+        sumSalary2 += employee.getSalary().doubleValue();
+    }
+ }
+ if( sumSalary2>5000 )
+    System.out.println("Headquarters");
+  
+   double sumSalary3 = 0;
+ 
+for(Employee employee : employees){
+    if( employee.getDno().getDname().equals("Administration") ){
+        sumSalary3 += employee.getSalary().doubleValue();
+    }
+ }
+ if( sumSalary3>5000 )
+    System.out.println("Administration");
+  
+----------------
+
+
+
+------------
+ //Query 12
+ //Sort the department name according to their paid salaries.
+Query query1 = em.createNamedQuery("Employee.findAll");
+List<Employee> employees = query1.getResultList();
+ArrayList<Double> paidSalaries = new ArrayList<Double>();
+ System.out.println("paid salaries");
+ double sumSalary1 = 0;
+ int noOfEmpInDepResearch = 0;
+for(Employee employee : employees){
+    if( employee.getDno().getDname().equals("Research") ){
+        noOfEmpInDepResearch++;
+        sumSalary1 += employee.getSalary().doubleValue();
+    }
+ }
+paidSalaries.add(sumSalary1);
+ double sumSalary2 = 0;
+for(Employee employee : employees){
+    if( employee.getDno().getDname().equals("Headquarters") ){
+        sumSalary2 += employee.getSalary().doubleValue();
+    }
+ }
+  paidSalaries.add(sumSalary2);
+   double sumSalary3 = 0;
+for(Employee employee : employees){
+    if( employee.getDno().getDname().equals("Administration") ){
+        sumSalary3 += employee.getSalary().doubleValue();
+    }
+ }
+  paidSalaries.add(sumSalary3);
+  Collections.sort(paidSalaries);
+  for(double paidSalarie : paidSalaries)
+      System.out.println(paidSalarie);
+
+    }
